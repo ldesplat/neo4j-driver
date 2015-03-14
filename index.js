@@ -20,11 +20,19 @@ exports = module.exports = internals.Cypher = function (options, callback) {
 
     this._config = Hoek.applyToDefaults(internals.defaults, options);
 
+    if (!this._config.url.endsWith('/')) {
+        this._config.url += '/';
+    }
+
     var self = this;
     Wreck.get(this._config.url, { headers: { 'Accept': 'application/json; charset=UTF-8'}, json: true }, function (err, response, payload) {
 
         if (err) {
             return callback(err);
+        }
+
+        if (!payload || !payload.transaction) {
+            return callback(new Error('transaction endpoint was not found. Ensure that you are connecting to a neo4j 2.1.7+ instance.'));
         }
 
         self._config.cypher = payload.transaction + '/commit';

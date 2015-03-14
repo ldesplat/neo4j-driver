@@ -39,7 +39,16 @@ lab.experiment('Cypher -', function () {
             expect(err.message).to.contain('Client request error');
             done();
         });
+    });
 
+    lab.test('No payload', function (done) {
+
+        var db = new neo({ url: internals.url.substring(0, internals.url.length - 2) }, function (err) {
+
+            expect(err).to.be.an.instanceof(Error);
+            expect(err.message).to.contain('transaction endpoint was not found');
+            done();
+        });
     });
 
 
