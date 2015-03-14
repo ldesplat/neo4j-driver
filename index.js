@@ -20,7 +20,7 @@ exports = module.exports = internals.Cypher = function (options, callback) {
 
     this._config = Hoek.applyToDefaults(internals.defaults, options);
 
-    if (!this._config.url.endsWith('/')) {
+    if (this._config.url.lastIndexOf('/') !== this._config.url.length - 1) {
         this._config.url += '/';
     }
 
