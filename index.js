@@ -1,38 +1,64 @@
 'use strict';
 
+var Hoek = require('hoek');
 var Wreck = require('wreck');
+
 
 Wreck.agents.https.keepAlive = true;
 Wreck.agents.http.keepAlive = true;
 
+
 var internals = {
-    addr: 'localhost:7474',
-    endpoint: 'http://localhost:7474/db/data/transaction/commit'
+    defaults: {
+        url: 'http://localhost:7474/db/data/',
+        timeout: 5000
+    }
 };
 
+
+exports = module.exports = internals.Cypher = function (options, callback) {
+
+    this._config = Hoek.applyToDefaults(internals.defaults, options);
+
+    var self = this;
+    Wreck.get(this._config.url, { headers: { 'Accept': 'application/json; charset=UTF-8'}, json: true }, function (err, response, payload) {
+
+        if (err) {
+            return callback(err);
+        }
+
+        self._config.cypher = payload.transaction + '/commit';
+        callback();
+    });
+};
+
+
+internals.Cypher.prototype.cypher = function (query, params, callback) {
+
+    if (typeof params === 'function') {
+        callback = params;
+        params = {};
+    }
+
+    Wreck.post(
+        this._config.cypher,
+        {
+            json: true,
+            payload: JSON.stringify({statements: [{statement: query, parameters: params}]})
+        },
+        function (err, response, payload) {
+
+            (err || payload.errors.length > 0) ? callback(err || payload.errors, null) : callback(null, payload.results);
+        }
+    );
+};
+
+/*
 internals.buildError = function (err) {
 
     var error = new Error(err.message);
     error.name = err.code;
     return error;
-};
-
-exports.install = function(addr) {
-    internals.addr = addr || internals.addr;
-    if (addr) {
-        internals.endpoint = 'http://' + addr + '/db/data/transaction/commit';
-    }
-};
-
-exports.cypher = function (query, params, cb) {
-
-    Wreck.post(internals.endpoint,
-        { json: true, payload: JSON.stringify({statements: [{statement: query, parameters: params}]}) },
-        function (err, response, payload) {
-
-            (err || payload.errors.length > 0) ? cb(err || payload.errors, null) : cb(null, payload.results);
-        }
-    );
 };
 
 exports.error = function (err, results, cb) {
@@ -65,3 +91,4 @@ exports.error = function (err, results, cb) {
 
     return cb(err, results);
 };
+*/
