@@ -1,3 +1,4 @@
 coverage.html
 node_modules
 .lock-wscript
+test/url.txt

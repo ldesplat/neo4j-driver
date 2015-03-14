@@ -1,16 +1,35 @@
+var Fs = require('fs');
+var Http = require('http');
 var Lab = require('lab');
 var Code = require('code');
-var Http = require('http');
-
 var neo = require('../index');
 
-var url = 'http://localhost:7474/db/data/';
 
 var expect = Code.expect;
 var lab = exports.lab = Lab.script();
 
 
-lab.experiment('Cypher', function () {
+var internals = {
+    url: 'http://localhost:7474/db/data/'
+};
+
+
+lab.experiment('Cypher -', function () {
+
+
+    lab.before(function (done) {
+
+        Fs.readFile('test/url.txt', { encoding: 'utf8' }, function (err, data) {
+
+            if (err) {
+                return done();
+            }
+
+            internals.url = data;
+            done();
+        });
+    });
+
 
     lab.test('Wrong URL', function (done) {
 
@@ -23,14 +42,14 @@ lab.experiment('Cypher', function () {
 
     });
 
+
     lab.test('Run a simple query', function (done) {
 
-        var db = new neo({ url: url }, function(error) {
+        var db = new neo({ url: internals.url }, function(error) {
             expect(error).to.not.exist();
 
             db.cypher('MATCH (n:DOESNOTEXIST) RETURN n', function (err, results) {
 
-                console.log(err);
                 expect(err).to.be.null();
                 expect(results).to.be.an.array();
                 expect(results[0].columns).to.be.an.array();
@@ -40,9 +59,10 @@ lab.experiment('Cypher', function () {
         });
     });
 
+
     lab.test('Force a syntax error', function (done) {
 
-        var db = new neo({ url: url }, function(error) {
+        var db = new neo({ url: internals.url }, function(error) {
             expect(error).to.not.exist();
 
             db.cypher('INVALID SYNTAX', {}, function (err, results) {
@@ -53,6 +73,7 @@ lab.experiment('Cypher', function () {
             });
         });
     });
+
 
     lab.test('Force a network error', function (done) {
 
