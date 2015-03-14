@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/ldesplat/neo4j-js.svg?branch=master)](https://travis-ci.org/ldesplat/neo4j-js)
 # neo4j-js
 Simple javascript neo4j driver
 

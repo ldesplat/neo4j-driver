@@ -4,8 +4,8 @@
   "description": "Simple driver for neo4j 2+ with no legacy support",
   "main": "index.js",
   "scripts": {
-    "test": "lab -t 100 -L",
-    "test-cov": "lab -r html -o coverage.html"
+    "test": "lab -fL -t 100 -m 3000",
+    "test-cov": "lab -fL -r html -m 3000 -o coverage.html"
   },
   "repository": {
     "type": "git",

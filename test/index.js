@@ -4,7 +4,7 @@ var Http = require('http');
 
 var neo = require('../index');
 
-var url = 'http://192.168.59.103:7474/db/data/';
+var url = 'http://localhost:7474/db/data/';
 
 var expect = Code.expect;
 var lab = exports.lab = Lab.script();
