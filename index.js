@@ -2,6 +2,9 @@
 
 var Wreck = require('wreck');
 
+Wreck.agents.https.keepAlive = true;
+Wreck.agents.http.keepAlive = true;
+
 var internals = {
     addr: 'localhost:7474',
     endpoint: 'http://localhost:7474/db/data/transaction/commit'
