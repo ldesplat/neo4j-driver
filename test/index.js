@@ -30,6 +30,7 @@ lab.experiment('Cypher', function () {
 
             db.cypher('MATCH (n:DOESNOTEXIST) RETURN n', function (err, results) {
 
+                console.log(err);
                 expect(err).to.be.null();
                 expect(results).to.be.an.array();
                 expect(results[0].columns).to.be.an.array();
