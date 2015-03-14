@@ -28,7 +28,7 @@ exports = module.exports = internals.Cypher = function (options, callback) {
         }
 
         if (typeof payload.transaction === 'undefined') {
-            self._config.cypher = this._config.url + 'transaction/commit';
+            self._config.cypher = self._config.url + 'transaction/commit';
         }
         else {
             self._config.cypher = payload.transaction + '/commit';
