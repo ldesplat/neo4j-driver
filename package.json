@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/ldesplat/neo4j-js",
   "dependencies": {
+    "async": "^0.9.0",
     "hoek": "^2.11.1",
     "wreck": "^5.2.0"
   },

@@ -2,6 +2,7 @@
 
 var Hoek = require('hoek');
 var Wreck = require('wreck');
+var Transaction = require('./lib/transaction');
 
 
 Wreck.agents.https.keepAlive = true;
@@ -59,6 +60,16 @@ internals.Cypher.prototype.cypher = function (query, params, callback) {
             (err || payload.errors.length > 0) ? callback(err || payload.errors, null) : callback(null, payload.results);
         }
     );
+};
+
+internals.Cypher.prototype.transact = function (options) {
+
+    var config = {
+        transaction = this._config.transaction,
+        timeout = this._config.timeout
+    };
+
+    return new Transaction(config);
 };
 
 /*
