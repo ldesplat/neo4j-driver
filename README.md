@@ -1,8 +1,5 @@
-# Neo4j-js
+# Neo4j-js [![Build Status](https://travis-ci.org/ldesplat/neo4j-js.svg?branch=master)](https://travis-ci.org/ldesplat/neo4j-js) [![Dependency Status](https://david-dm.org/ldesplat/neo4j-js.svg?style=flat)](https://david-dm.org/ldesplat/neo4j-js)
 Simple javascript Neo4j driver that supports only the recomended endpoints.
-
-[![Build Status](https://travis-ci.org/ldesplat/neo4j-js.svg?branch=master)](https://travis-ci.org/ldesplat/neo4j-js)
-[![Dependency Status](https://david-dm.org/ldesplat/neo4j-js.svg?style=flat)](https://david-dm.org/ldesplat/neo4j-js)
 
 ## Work in Progress
 
