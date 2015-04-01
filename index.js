@@ -12,12 +12,13 @@ Wreck.agents.http.keepAlive = true;
 var internals = {
     defaults: {
         url: 'http://localhost:7474/db/data/',
-        timeout: 5000
+        timeout: 5000,
+        credentials: null
     }
 };
 
 
-exports = module.exports = internals.Cypher = function (options, callback) {
+exports = module.exports = internals.Neo4j = function (options, callback) {
 
     this._config = Hoek.applyToDefaults(internals.defaults, options);
 
@@ -25,48 +26,66 @@ exports = module.exports = internals.Cypher = function (options, callback) {
         this._config.url += '/';
     }
 
+    this._headers = {
+        'Accept': 'application/json; charset=UTF-8'
+    };
+
+    if (this._config.credentials) {
+        this._headers.authorization = 'Basic ' + new Buffer(this._config.credentials.username + ':' + this._config.credentials.password).toString('base64');
+    }
+
     var self = this;
-    Wreck.get(this._config.url, { headers: { 'Accept': 'application/json; charset=UTF-8'}, json: true }, function (err, response, payload) {
+    Wreck.get(this._config.url, { headers: this._headers, json: true }, function (err, response, payload) {
 
         if (err) {
             return callback(err);
         }
 
-        if (!payload || !payload.transaction) {
-            return callback(new Error('transaction endpoint was not found. Ensure that you are connecting to a neo4j 2.1.7+ instance.'));
+        if (response.statusCode === 401) {
+            return callback(new Error('Unauthorized access. Ensure that you are providing credentials.'));
         }
 
-        self._config.cypher = payload.transaction + '/commit';
+        if (!payload || !payload.transaction) {
+            return callback(new Error('Transaction endpoint was not found. Ensure that you are connecting to a neo4j 2.1.7+ instance.'));
+        }
+
+        self._config.transaction = payload.transaction;
+        self._config.commit = payload.transaction + '/commit';
         callback();
     });
 };
 
 
-internals.Cypher.prototype.cypher = function (query, params, callback) {
+internals.Neo4j.prototype.cypher = function (query, params, callback) {
 
     if (typeof params === 'function') {
         callback = params;
+        params = undefined;
+    }
+
+    if (!params) {
         params = {};
     }
 
-    Wreck.post(
-        this._config.cypher,
-        {
-            json: true,
-            payload: JSON.stringify({statements: [{statement: query, parameters: params}]})
-        },
-        function (err, response, payload) {
+    var transact = this.transact();
 
-            (err || payload.errors.length > 0) ? callback(err || payload.errors, null) : callback(null, payload.results);
+    var statements = [
+        {
+            statement: query,
+            parameters: params
         }
-    );
+    ];
+
+    transact.commit(statements, callback);
 };
 
-internals.Cypher.prototype.transact = function (options) {
+
+internals.Neo4j.prototype.transact = function (options) {
 
     var config = {
-        transaction = this._config.transaction,
-        timeout = this._config.timeout
+        transaction: this._config.transaction,
+        timeout: this._config.timeout,
+        authorization: this._headers.authorization
     };
 
     return new Transaction(config);

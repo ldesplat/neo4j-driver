@@ -1,5 +1,6 @@
 var Fs = require('fs');
 var Http = require('http');
+var Hoek = require('hoek');
 var Lab = require('lab');
 var Code = require('code');
 var neo = require('../index');
@@ -10,26 +11,17 @@ var lab = exports.lab = Lab.script();
 
 
 var internals = {
-    url: 'http://localhost:7474/db/data/'
+    options: {
+        url: 'http://localhost:7474/db/data/',
+        credentials: {
+            username: 'neo4j',
+            password: '4813lois'
+        }
+    }
 };
 
 
 lab.experiment('Cypher -', function () {
-
-
-    lab.before(function (done) {
-
-        Fs.readFile('test/url.txt', { encoding: 'utf8' }, function (err, data) {
-
-            if (err) {
-                return done();
-            }
-
-            internals.url = data;
-            done();
-        });
-    });
-
 
     lab.test('Wrong URL', function (done) {
 
@@ -41,12 +33,29 @@ lab.experiment('Cypher -', function () {
         });
     });
 
+
     lab.test('No payload', function (done) {
 
-        var db = new neo({ url: internals.url.substring(0, internals.url.length - 2) }, function (err) {
+        var config = Hoek.applyToDefaults(internals.options, {
+            url: internals.options.url.substring(0, internals.options.url.length - 2)
+        });
+
+        var db = new neo(config, function (err) {
 
             expect(err).to.be.an.instanceof(Error);
-            expect(err.message).to.contain('transaction endpoint was not found');
+            expect(err.message).to.contain('Transaction endpoint was not found');
+            done();
+        });
+    });
+
+
+    lab.test('Bad authentication', function (done) {
+
+        var config = Hoek.applyToDefaults(internals.options, { credentials: { username: 'invalid', password: 'invalid' } });
+
+        var db = new neo(config, function (err) {
+            expect(err).to.be.an.instanceOf(Error);
+            expect(err.message).to.contain('Unauthorized');
             done();
         });
     });
@@ -54,7 +63,7 @@ lab.experiment('Cypher -', function () {
 
     lab.test('Run a simple query', function (done) {
 
-        var db = new neo({ url: internals.url }, function(error) {
+        var db = new neo(internals.options, function(error) {
             expect(error).to.not.exist();
 
             db.cypher('MATCH (n:DOESNOTEXIST) RETURN n', function (err, results) {
@@ -63,21 +72,6 @@ lab.experiment('Cypher -', function () {
                 expect(results).to.be.an.array();
                 expect(results[0].columns).to.be.an.array();
                 expect(results[0].columns[0]).to.equal('n');
-                done();
-            });
-        });
-    });
-
-
-    lab.test('Force a syntax error', function (done) {
-
-        var db = new neo({ url: internals.url }, function(error) {
-            expect(error).to.not.exist();
-
-            db.cypher('INVALID SYNTAX', {}, function (err, results) {
-
-                expect(err).to.be.an.array();
-                expect(err[0].code).to.contain('InvalidSyntax');
                 done();
             });
         });
@@ -110,6 +104,38 @@ lab.experiment('Cypher -', function () {
 
                     expect(err).to.be.an.instanceof(Error);
                     expect(err.message).to.contain('Client request error');
+                    done();
+                });
+            });
+        });
+    });
+
+
+    lab.test('get a transact object', function (done) {
+
+        var db = new neo(internals.options, function (error) {
+
+            var transaction = db.transact();
+
+            var stmts1 = [
+                {
+                    statement: 'MATCH (n:DOESNOTEXIST) RETURN n',
+                    parameters: {}
+                }
+            ];
+            transaction.transact(stmts1, function (err, res) {
+
+                expect(err).to.be.null();
+                expect(res).to.be.an.array();
+                expect(res[0].columns).to.be.an.array();
+                expect(res[0].columns[0]).to.equal('n');
+
+                transaction.commit(stmts1, { commit: true }, function (error, results) {
+
+                    expect(error).to.be.null();
+                    expect(results).to.be.an.array();
+                    expect(results[0].columns).to.be.an.array();
+                    expect(results[0].columns[0]).to.equal('n');
                     done();
                 });
             });

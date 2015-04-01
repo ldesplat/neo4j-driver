@@ -15,7 +15,7 @@ This module has not been published to npm but let's assume it is called `neo4j-j
 var neo4j = require('neo4j-js');
 
 // specify a custom url (it defaults to http://localhost:7474/db/data/)
-var db = new neo({ url: 'http://localhost:7474/db/data/' }, function (error) {
+var db = new neo({ url: 'http://localhost:7474/db/data/', credentials: { username: 'neo4j', password: 'neo4j' } }, function (error) {
 
     // verify error here to ensure we are connected
     if (err) {
@@ -32,6 +32,23 @@ var db = new neo({ url: 'http://localhost:7474/db/data/' }, function (error) {
         // otherwize it is the normal error (an array) returned from Neo4j's transaction endpoint
 
         // results is the same object that Neo4j returns from the transaction/commit endpoint
+
+        var stmts = [
+            {
+                statement: 'MATCH (n:Person) RETURN n',
+                parameters: {}
+            }
+        ];
+
+        var transact = db.transact();
+
+        transact.transact(stmts, {/*options*/}, function (errors, results) {
+
+            transact.commit(smts, {/*options*/}, function (err, res) {
+
+
+            });
+        });
     });
 });
 
