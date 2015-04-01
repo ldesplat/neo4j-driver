@@ -15,7 +15,7 @@ var internals = {
         url: 'http://localhost:7474/db/data/',
         credentials: {
             username: 'neo4j',
-            password: '4813lois'
+            password: 'neo4j'
         }
     }
 };

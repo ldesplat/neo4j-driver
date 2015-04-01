@@ -12,7 +12,7 @@ var internals = {
     options: {
         transaction: 'http://localhost:7474/db/data/transaction',
         timeout: 5000,
-        authorization: 'Basic ' + new Buffer('neo4j' + ':' + '4813lois').toString('base64')
+        authorization: 'Basic ' + new Buffer('neo4j' + ':' + 'neo4j').toString('base64')
     }
 };
 
