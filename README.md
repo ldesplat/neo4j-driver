@@ -7,6 +7,14 @@ You are much better off using approved neo4j javascript drivers. This is current
 
 Be warned, there are many issues.
 
+## Roadmap
+
+- Provide streaming support to transaction endpoint responses
+- Allow to change resultDataContents -> Should be part of options object
+- Provide logging hooks
+- Provide events such as (Transaction about to expire soon, Transaction expired, Log Happened)
+- Expose Expiry time in transact object
+
 ## API Usage
 
 This module has not been published to npm but let's assume it is called `neo4j-js`
