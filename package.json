@@ -1,17 +1,17 @@
 {
-  "name": "neo4j-js",
+  "name": "neo4j-driver",
   "version": "0.0.1",
   "description": "Javascript driver for Neo4j 2.2+ with Cypher and Transactions as first class citizens.",
   "main": "index.js",
   "scripts": {
-    "test": "lab -fL -t 100 -m 5000",
+    "test": "lab -fL -t 100 -m 10000",
     "test-cov": "lab -fL -r html -o coverage.html",
-    "test-coveralls": "lab -fL -t 100 -m 5000 -r lcov | coveralls",
+    "test-coveralls": "lab -fL -t 100 -m 10000 -r lcov | coveralls",
     "test-travis": "npm run test && npm run test-coveralls"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ldesplat/neo4j-js"
+    "url": "https://github.com/ldesplat/neo4j-driver"
   },
   "keywords": [
     "neo4j",
@@ -22,9 +22,9 @@
   "author": "Lois Desplat <lois.desplat@gmail.com> (http://www.loisdesplat.com/)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ldesplat/neo4j-js/issues"
+    "url": "https://github.com/ldesplat/neo4j-driver/issues"
   },
-  "homepage": "https://github.com/ldesplat/neo4j-js",
+  "homepage": "https://github.com/ldesplat/neo4j-driver",
   "dependencies": {
     "hoek": "^2.12.0",
     "wreck": "^5.4.0"

@@ -1,4 +1,4 @@
-# Neo4j-js [![Build Status](https://travis-ci.org/ldesplat/neo4j-js.svg?branch=master)](https://travis-ci.org/ldesplat/neo4j-js) [![Coverage Status](https://coveralls.io/repos/ldesplat/neo4j-js/badge.svg?branch=master)](https://coveralls.io/r/ldesplat/neo4j-js?branch=master) [![Dependency Status](https://david-dm.org/ldesplat/neo4j-js.svg?style=flat)](https://david-dm.org/ldesplat/neo4j-js)
+# Neo4j-js [![Build Status](https://travis-ci.org/ldesplat/neo4j-driver.svg?branch=master)](https://travis-ci.org/ldesplat/neo4j-driver) [![Coverage Status](https://coveralls.io/repos/ldesplat/neo4j-driver/badge.svg?branch=master)](https://coveralls.io/r/ldesplat/neo4j-driver?branch=master) [![Dependency Status](https://david-dm.org/ldesplat/neo4j-driver.svg?style=flat)](https://david-dm.org/ldesplat/neo4j-driver)
 This driver supports Cypher and Transactions as first class citizens. It is meant to be used for heavy writes and heavy queries. For that reason, it tries to do the least possible while still trying to provide optional utilities to make our jobs as developers easier.
 
 ## Contributions
@@ -43,7 +43,7 @@ The callback has the following properties:
   - The object you will use to interact with this library
 
 ```javascript
-var Neo4j = require('neo4j-js');
+var Neo4j = require('neo4j-driver');
 Neo4j.Client({ url: 'http://localhost:7474/db/data/' }, function (err, client) {
 
     // client.cypher
@@ -117,7 +117,7 @@ The callback has the following properties:
   - Array of results returned by Neo4j
 
 ```javascript
-var Neo4j = require('neo4j-js');
+var Neo4j = require('neo4j-driver');
 Neo4j.Client({}, function (err, client) {
 
     if (err) {
