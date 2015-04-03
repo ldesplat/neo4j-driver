@@ -1,7 +1,7 @@
 {
   "name": "neo4j-js",
   "version": "0.0.1",
-  "description": "Simple driver for neo4j 2+ with no legacy support",
+  "description": "Javascript driver for Neo4j 2.2+ with Cypher and Transactions as first class citizens.",
   "main": "index.js",
   "scripts": {
     "test": "lab -fL -t 100 -m 5000",
@@ -16,7 +16,8 @@
   "keywords": [
     "neo4j",
     "driver",
-    "cypher"
+    "cypher",
+    "transaction"
   ],
   "author": "Lois Desplat <lois.desplat@gmail.com> (http://www.loisdesplat.com/)",
   "license": "MIT",
@@ -25,7 +26,6 @@
   },
   "homepage": "https://github.com/ldesplat/neo4j-js",
   "dependencies": {
-    "async": "^0.9.0",
     "hoek": "^2.12.0",
     "wreck": "^5.4.0"
   },

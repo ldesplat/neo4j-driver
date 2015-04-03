@@ -55,6 +55,18 @@ lab.experiment('Cypher -', function () {
         var config = Hoek.applyToDefaults(internals.options, { credentials: { username: 'invalid', password: 'invalid' } });
 
         Neo4j.Client(config, function (err) {
+
+            expect(err).to.be.an.instanceOf(Error);
+            expect(err.message).to.contain('Unauthorized');
+            done();
+        });
+    });
+
+
+    lab.test('No options and therefore no authentication', function (done) {
+
+        Neo4j.Client(function (err) {
+
             expect(err).to.be.an.instanceOf(Error);
             expect(err.message).to.contain('Unauthorized');
             done();
