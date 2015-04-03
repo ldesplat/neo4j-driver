@@ -6,7 +6,7 @@
   "scripts": {
     "test": "lab -fL -t 100",
     "test-cov": "lab -fL -r html -o coverage.html",
-    "test-travis": "lab -fL -t 100 -r lcov | coveralls"
+    "test-travis": "lab -fL -t 100 -m 5000 -r lcov | coveralls"
   },
   "repository": {
     "type": "git",
