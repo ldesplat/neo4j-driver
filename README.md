@@ -1,4 +1,4 @@
-# Neo4j-js [![Build Status](https://travis-ci.org/ldesplat/neo4j-driver.svg?branch=master)](https://travis-ci.org/ldesplat/neo4j-driver) [![Coverage Status](https://coveralls.io/repos/ldesplat/neo4j-driver/badge.svg?branch=master)](https://coveralls.io/r/ldesplat/neo4j-driver?branch=master) [![Dependency Status](https://david-dm.org/ldesplat/neo4j-driver.svg?style=flat)](https://david-dm.org/ldesplat/neo4j-driver)
+# Neo4j-driver [![Build Status](https://travis-ci.org/ldesplat/neo4j-driver.svg?branch=master)](https://travis-ci.org/ldesplat/neo4j-driver) [![Coverage Status](https://coveralls.io/repos/ldesplat/neo4j-driver/badge.svg?branch=master)](https://coveralls.io/r/ldesplat/neo4j-driver?branch=master) [![Dependency Status](https://david-dm.org/ldesplat/neo4j-driver.svg?style=flat)](https://david-dm.org/ldesplat/neo4j-driver)
 This driver supports Cypher and Transactions as first class citizens. It is meant to be used for heavy writes and heavy queries. For that reason, it tries to do the least possible while still trying to provide optional utilities to make our jobs as developers easier.
 
 ## Contributions
