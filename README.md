@@ -36,8 +36,8 @@ Neo4j.Client({ url: 'http://localhost:7474/db/data/', credentials: { username: '
     db.cypher('MATCH (n:Person) RETURN n', function (err, results) {
 
         // verify the err object again
-        // if it is an instanceof Error then it's most likely a network error
-        // otherwize it is the normal error (an array) returned from Neo4j's transaction endpoint
+        // if it is an instanceOf Error then it's most likely a network error
+        // otherwise it is the normal error (an array) returned from Neo4j's transaction endpoint
 
         // results is the same object that Neo4j returns from the transaction/commit endpoint
 
@@ -52,6 +52,8 @@ Neo4j.Client({ url: 'http://localhost:7474/db/data/', credentials: { username: '
 
         transact.transact(stmts, {/*options*/}, function (errors, results) {
 
+            // transact.extend(function (err))
+            // transact.rollback(function (err))
             transact.commit(smts, {/*options*/}, function (err, res) {
 
 
