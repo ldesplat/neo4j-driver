@@ -20,10 +20,10 @@ Be warned, there are many issues.
 This module has not been published to npm but let's assume it is called `neo4j-js`
 
 ```javascript
-var neo4j = require('neo4j-js');
+var Neo4j = require('neo4j-js');
 
 // specify a custom url (it defaults to http://localhost:7474/db/data/)
-var db = new neo({ url: 'http://localhost:7474/db/data/', credentials: { username: 'neo4j', password: 'neo4j' } }, function (error) {
+Neo4j.Client({ url: 'http://localhost:7474/db/data/', credentials: { username: 'neo4j', password: 'neo4j' } }, function (error, db) {
 
     // verify error here to ensure we are connected
     if (err) {

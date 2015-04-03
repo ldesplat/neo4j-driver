@@ -3,7 +3,8 @@ var Http = require('http');
 var Hoek = require('hoek');
 var Lab = require('lab');
 var Code = require('code');
-var neo = require('../index');
+
+var Neo4j = require('../');
 
 
 var expect = Code.expect;
@@ -25,7 +26,7 @@ lab.experiment('Cypher -', function () {
 
     lab.test('Wrong URL', function (done) {
 
-        var db = new neo({ url: 'http://nonsense.nonsense' }, function (err) {
+        Neo4j.Client({ url: 'http://nonsense.nonsense' }, function (err) {
 
             expect(err).to.be.an.instanceof(Error);
             expect(err.message).to.contain('Client request error');
@@ -40,7 +41,7 @@ lab.experiment('Cypher -', function () {
             url: internals.options.url.substring(0, internals.options.url.length - 2)
         });
 
-        var db = new neo(config, function (err) {
+        Neo4j.Client(config, function (err) {
 
             expect(err).to.be.an.instanceof(Error);
             expect(err.message).to.contain('Transaction endpoint was not found');
@@ -53,7 +54,7 @@ lab.experiment('Cypher -', function () {
 
         var config = Hoek.applyToDefaults(internals.options, { credentials: { username: 'invalid', password: 'invalid' } });
 
-        var db = new neo(config, function (err) {
+        Neo4j.Client(config, function (err) {
             expect(err).to.be.an.instanceOf(Error);
             expect(err.message).to.contain('Unauthorized');
             done();
@@ -63,7 +64,7 @@ lab.experiment('Cypher -', function () {
 
     lab.test('Run a simple query', function (done) {
 
-        var db = new neo(internals.options, function(error) {
+        Neo4j.Client(internals.options, function(error, db) {
             expect(error).to.not.exist();
 
             db.cypher('MATCH (n:DOESNOTEXIST) RETURN n', function (err, results) {
@@ -97,7 +98,7 @@ lab.experiment('Cypher -', function () {
 
         server.listen(0, function () {
 
-            var db = new neo({ url: 'http://localhost:' + server.address().port }, function(error) {
+            Neo4j.Client({ url: 'http://localhost:' + server.address().port }, function(error, db) {
                 expect(error).to.not.exist();
 
                 db.cypher('INVALID SYNTAX', {}, function (err, results) {
@@ -113,7 +114,7 @@ lab.experiment('Cypher -', function () {
 
     lab.test('get a transact object', function (done) {
 
-        var db = new neo(internals.options, function (error) {
+        Neo4j.Client(internals.options, function (error, db) {
 
             var transaction = db.transact();
 
